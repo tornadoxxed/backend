@@ -216,7 +216,7 @@ export default {
     </table>
   </div>
   <div class="uses-tc" v-if="tcUses && tcUses.length > 0">
-    <p>This account has been involved in Tornado Cash transactions</p>
+    <p>This address has been involved in Tornado Cash transactions</p>
     <table>
       <thead>
         <th>Blockchain</th>
@@ -262,7 +262,9 @@ export default {
       title="chart 1"
     ></iframe>
   </div>
-  <div v-if="tcUses && tcUses.length == 0">You have not used TC</div>
+  <div v-if="tcUses && tcUses.length == 0">
+    This address has not been involved in Tornado Cash transactions
+  </div>
 </template>
 
 <style>
