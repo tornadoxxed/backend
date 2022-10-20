@@ -5,7 +5,7 @@ import numpy as np
 import streamlit as st
 from dune import *
 
-st.sidebar.image("logo.png", width=100)
+# st.sidebar.image("logo.png", width=100)
 
 st.write("⚠️Your privacy might be at risk⚠️")
 st.write("Potential Link caused by matching total cross-pool amounts")
