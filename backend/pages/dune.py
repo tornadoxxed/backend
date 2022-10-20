@@ -6,9 +6,10 @@ import logging
 import json
 import os
 import streamlit as st
-from dotenv import load_dotenv
 
-load_dotenv()
+# from dotenv import load_dotenv
+
+# load_dotenv()
 
 log = logging.getLogger("simple_example")
 log.setLevel(logging.INFO)
