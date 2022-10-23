@@ -4,6 +4,8 @@ import pandas as pd
 from flask import Flask
 from flask_caching import Cache
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,6 +25,12 @@ app = Flask(__name__)
 app.config.from_mapping(config)
 cache = Cache(app)
 CORS(app)
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://",
+)
 
 
 @app.route("/lookup")
