@@ -5,7 +5,6 @@ import time
 import logging
 import json
 import os
-import streamlit as st
 
 # from dotenv import load_dotenv
 
@@ -14,7 +13,6 @@ import streamlit as st
 log = logging.getLogger("simple_example")
 log.setLevel(logging.INFO)
 
-query_id = 1279259
 DUNE_API_KEY = os.environ["DUNE_API_KEY"]
 
 headers = {"x-dune-api-key": DUNE_API_KEY}
@@ -23,12 +21,14 @@ QUERY_WORKING = ["QUERY_STATE_PENDING", "QUERY_STATE_EXECUTING"]
 QUERY_DONE = "QUERY_STATE_COMPLETED"
 
 
-@st.cache
-def execute_query(query_id):
+def execute_query(query_id, parameters):
     log.info(f"Executing query {query_id}")
     r = requests.post(
         f"https://api.dune.com/api/v1/query/{query_id}/execute",
         headers=headers,
+        json={
+            "query_parameters": parameters,
+        },
     )
 
     r.raise_for_status()
@@ -38,7 +38,6 @@ def execute_query(query_id):
     return execution_id
 
 
-@st.cache
 def wait_for_execution(execution_id):
     log.info("Waiting for execution")
     status_response = {}
@@ -60,7 +59,6 @@ def wait_for_execution(execution_id):
         raise SystemExit(f'Error: Query state is {status_response["state"]}')
 
 
-@st.cache
 def download_response(execution_id):
     log.info("Downloading response")
     r = requests.get(
@@ -81,10 +79,15 @@ def save(parsed):
         file.write(json.dumps(parsed))
 
 
-if __name__ == "__main__":
-
-    execution_id = execute_query(query_id)
+def get_query(query_id, parameters=None):
+    execution_id = execute_query(query_id, parameters)
+    print(execution_id)
     wait_for_execution(execution_id)
     raw = download_response(execution_id)
     parsed = parse(raw)
-    save(parsed)
+    return parsed
+
+
+if __name__ == "__main__":
+    response = get_query(query_id)
+    save(response)
